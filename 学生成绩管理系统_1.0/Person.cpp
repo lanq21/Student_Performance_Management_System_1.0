@@ -40,9 +40,9 @@ void Person::Edit_Faculty(const std::string& faculty)
 
 void Person::Print() const
 {
-	std::cout << "姓名：" << Get_Name() << std::endl;
-	std::cout << "编号：" << Get_ID() << std::endl;
-	std::cout << "院系：" << Get_Faculty() << std::endl;
+	std::cout << "姓名：" << Get_Name() << std::endl
+	 << "编号：" << Get_ID() << std::endl
+	 << "院系：" << Get_Faculty() << std::endl;
 }
 
 Person::~Person() {}

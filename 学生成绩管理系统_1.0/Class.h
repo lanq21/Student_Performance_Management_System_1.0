@@ -68,6 +68,11 @@ public:
 	void Print() const;
 
 	/// <summary>
+	/// 重载运算符 << 用于在控制台打印
+	/// </summary>
+	friend std::ostream& operator<<(std::ostream& output, const Class& class_obj);
+
+	/// <summary>
 	/// 在控制台打印所有班级课程名、教师名
 	/// </summary>
 	static void _Print_All();

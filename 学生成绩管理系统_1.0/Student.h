@@ -55,7 +55,6 @@ public:
 	/// <returns>学生成绩</returns>
 	const double Get_Score(const Class* const class_ptr);
 
-
 	/// <param name="class_ptr">课程指针</param>
 	/// <returns>学生成绩</returns>
 	const double Get_Score(const Course* const course_ptr);

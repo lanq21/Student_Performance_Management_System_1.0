@@ -460,7 +460,9 @@ void Class::_Read_File(std::ifstream& file)
 
 	// 移动读指针到班级列表
 	file.seekg(std::ios_base::beg); // 定位到文件头
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到标题
+	if (file.peek() != '#')
+		file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
 	file.get(); // 读入第二个'#'
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到教师列表标题
 	file.get(); // 读入第二个'#'
@@ -514,4 +516,13 @@ Class::~Class()
 	std::cout << "删除班级 -> 已删除班级：课程 " << Get_Course_ptr()->Get_Name()
 		<< "，教师 " << Get_Teacher_ptr()->Get_Name()
 		<< std::endl;
+}
+
+std::ostream& operator<<(std::ostream& output, const Class& class_obj)
+{
+	output << "班级：课程 " << class_obj.Get_Course_ptr()->Get_Name() // 课程名
+		<< "，教师 " << class_obj.Get_Teacher_ptr()->Get_Name() // 教师名
+		<< "，学生人数：" << class_obj.Student_List.size() // 学生人数
+		<< std::endl;
+	return output;
 }

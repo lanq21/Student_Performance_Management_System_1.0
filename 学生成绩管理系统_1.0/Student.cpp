@@ -214,6 +214,13 @@ void Student::Add_Record(Class* const class_ptr, const double& score)
 	}
 	else
 	{
+		for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++) // 查找重复项
+			if ((*iter).Get_Class_ptr()->Get_Course_ptr() == class_ptr->Get_Course_ptr()) // 找到重复项
+			{
+				std::cerr<< Get_Name() << " -> 编辑成绩记录 -> 新增成绩记录 -> "
+					<< class_ptr->Get_Course_ptr()->Get_Name() << "error（成绩已存在）\n";
+				return;
+			}
 		Record_List.push_back(Record(class_ptr, score)); // 添加成绩记录
 		class_ptr->Add_Student(this); // 对应班级添加学生
 		std::cout << Get_Name() << " -> 编辑成绩记录 -> 新增成绩记录 -> "
@@ -692,7 +699,9 @@ void Student::_Read_File(std::ifstream& file)
 
 	// 移动读指针到学生列表
 	file.seekg(std::ios_base::beg); // 定位到文件头
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到标题
+	if (file.peek() != '#')
+		file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
 	file.get(); // 读入第二个'#'
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到教师列表标题
 	file.get(); // 读入第二个'#'
@@ -731,15 +740,18 @@ void Student::_Read_File(std::ifstream& file)
 		for (int i = 0; i < course_num; i++)
 		{
 			delimiter = file.get(); // 读入 '|' 后的 ' ' 或 '\n'
-			delimiter = file.get(); // 读入 '`' 或 '|'
-			if (delimiter == '|') // 该课程无成绩
-				continue;
-			else
+			while (delimiter == ' ')
+				delimiter = file.get();
+			if (delimiter == '\n')
+				delimiter = file.get(); // 读入 '|'
+			if (delimiter == '`') // 该课程有成绩
+			{
 				file >> num_class // 班级序号
-				>> delimiter // '`'
-				>> score // 成绩
-				>> delimiter; // '|'
-			student->Add_Record(Class::_Get_ptr(num_class - 1), score);
+					>> delimiter // '`'
+					>> score // 成绩
+					>> delimiter; // '|'
+				student->Add_Record(Class::_Get_ptr(num_class - 1), score);
+			}
 		}
 		file.get(); // 读入 '\n'
 		delimiter = file.get(); // 读入下一行首字符

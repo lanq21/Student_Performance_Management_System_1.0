@@ -65,6 +65,11 @@ public:
 	void Print() const;
 
 	/// <summary>
+	/// 重载运算符 << 用于在控制台打印
+	/// </summary>
+	friend std::ostream& operator<<(std::ostream& output, const Course& course_obj);
+
+	/// <summary>
 	/// 从班级列表删除班级
 	/// </summary>
 	/// <param name="class_ptr">班级指针</param>

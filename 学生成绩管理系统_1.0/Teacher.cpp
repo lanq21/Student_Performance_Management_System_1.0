@@ -151,7 +151,15 @@ void Teacher::Add_Class(Class* const class_ptr)
 		return;
 	}
 	else
+	{
+		for (auto iter = Class_List.begin(); iter != Class_List.end(); iter++)
+			if ((*iter) == class_ptr)
+			{
+				std::cerr << Get_Name() << " -> 添加班级 ->error（班级已存在）\n";
+				return;
+			}
 		Class_List.push_back(class_ptr);
+	}
 }
 
 Teacher::~Teacher()
@@ -386,7 +394,9 @@ void Teacher::_Read_File(std::ifstream& file)
 
 	// 移动读指针到课程列表
 	file.seekg(std::ios_base::beg); // 定位到文件头
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到标题
+	if (file.peek() != '#')
+		file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
 	file.get(); // 读入第二个 '#'
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到教师列表标题
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // 跳过 '## 教师'
@@ -409,4 +419,17 @@ void Teacher::_Read_File(std::ifstream& file)
 		delimiter = file.get(); // 读入下一行首字符
 		Teacher::_New(name, id, faculty);
 	}
+}
+
+std::ostream& operator<<(std::ostream& output, const Teacher& teacher_obj)
+{
+	output << "姓名：" << teacher_obj.Get_Name() << std::endl
+		<< "编号：" << teacher_obj.Get_ID() << std::endl
+		<< "院系：" << teacher_obj.Get_Faculty() << std::endl;
+	for (auto iter = teacher_obj.Class_List.begin(); iter != teacher_obj.Class_List.end(); iter++)
+	{
+		output << iter - teacher_obj.Class_List.begin() + 1 << '.';
+		output<<(*iter);
+	}
+	return output;
 }

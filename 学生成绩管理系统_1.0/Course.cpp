@@ -485,7 +485,9 @@ void Course::_Read_File(std::ifstream& file)
 
 	// 移动读指针到课程列表
 	file.seekg(std::ios_base::beg); // 定位到文件头
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到标题
+	if (file.peek() != '#')
+		file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // 跳过 "## 课程"
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // 跳过空行
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // 跳过 "| 序号 | 课程名 | 授课教师 | 课程满分 |"
@@ -496,6 +498,7 @@ void Course::_Read_File(std::ifstream& file)
 	{
 		file >> serial // 序号
 			>> delimiter; // '|'
+		file.get(); // ' '
 		getline(file, name, '|'); // 姓名
 		name.pop_back();
 		file >> delimiter; // '|'
@@ -512,4 +515,13 @@ Course::~Course()
 	Class::Delete(this); // 删除相关班级
 	_List.erase(std::find(_List.begin(), _List.end(), this)); // 从课程列表中删除
 	std::cout << "删除课程 -> 已删除课程 " << Get_Name() << std::endl;
+}
+
+std::ostream& operator<<(std::ostream& output, const Course& course_obj)
+{
+	output<< course_obj.Get_Name()
+		<< " -> 课程满分：" << course_obj.Get_Full_Score() << std::endl;
+	for (auto iter = course_obj.Class_List.begin(); iter != course_obj.Class_List.end(); iter++)
+		output << iter - course_obj.Class_List.begin() + 1 << '.'<<(*iter);
+	return output;
 }

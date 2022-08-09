@@ -33,6 +33,11 @@ public:
 	virtual void Print() const;
 
 	/// <summary>
+	/// 重载运算符 << 用于在控制台打印
+	/// </summary>
+	friend std::ostream& operator<<(std::ostream& output, const Teacher& teacher_obj);
+
+	/// <summary>
 	/// 从班级列表删除班级
 	/// </summary>
 	/// <param name="class_ptr"></param>

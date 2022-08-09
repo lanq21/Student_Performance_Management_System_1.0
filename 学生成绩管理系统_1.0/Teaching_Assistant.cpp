@@ -236,7 +236,9 @@ void Teaching_Assistant::_Read_File(std::ifstream& file)
 
 	// 移动读指针到学生列表
 	file.seekg(std::ios_base::beg); // 定位到文件头
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到标题
+	if (file.peek() != '#')
+		file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到课程列表标题
 	file.get(); // 读入第二个'#'
 	file.ignore(std::numeric_limits<std::streamsize>::max(), '#'); // 定位到教师列表标题
 	file.get(); // 读入第二个'#'
@@ -280,10 +282,18 @@ void Teaching_Assistant::_Read_File(std::ifstream& file)
 		{
 			file >> num_class // 班级序号
 				>> delimiter; // '`'
-			file.get(); // 读入 ' '
-			getline(file, name, ' '); // 读入 '，'
-			delimiter = file.get();
 			(*iter)->Add_Class(Class::_Get_ptr(num_class - 1));
+			file.get(); // 读入 ' '
+			if (file.peek() == '|')
+			{
+				file.get(); // '|'
+				break;
+			}
+			else
+			{
+				getline(file, name, ' '); // 读入 '、'
+				delimiter = file.get(); // 读入 '`' 
+			}
 		}
 		file.get(); // 读入 '\n'
 		delimiter = file.get(); // 读入下一行首字符
