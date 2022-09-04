@@ -11,7 +11,7 @@
 std::vector<Student*> Student::_List;
 
 Student::Student(const std::string& name, const std::string& id, const std::string& faculty, const Grade_Type& grade, bool is_ta) :
-	Person(name, id, faculty), Grade(grade), Is_TA(is_ta) {}
+	Person(name, id, faculty, is_ta), Grade(grade) {}
 
 Student* const Student::_New(std::string name, std::string id, std::string faculty, Grade_Type grade, bool is_ta)
 {
@@ -182,7 +182,7 @@ void Student::_Edit_All()
 		case '3': // 删除学生
 			if (flag) // 当前无学生
 				return;
-			std::cout << "删除学生（输入序号）或 输入 0 取消：\n";
+			std::cout << "删除学生（输入序号）或 输入 0 取消：";
 			std::cin >> new_num;
 			std::cin.ignore();
 
@@ -217,12 +217,13 @@ void Student::Add_Record(Class* const class_ptr, const double& score)
 		for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++) // 查找重复项
 			if ((*iter).Get_Class_ptr()->Get_Course_ptr() == class_ptr->Get_Course_ptr()) // 找到重复项
 			{
-				std::cerr<< Get_Name() << " -> 编辑成绩记录 -> 新增成绩记录 -> "
-					<< class_ptr->Get_Course_ptr()->Get_Name() << "error（成绩已存在）\n";
+				std::cerr << Get_Name() << " -> 编辑成绩记录 -> 新增成绩记录 -> "
+					<< class_ptr->Get_Course_ptr()->Get_Name() << "-> error（成绩已存在）\n";
 				return;
 			}
 		Record_List.push_back(Record(class_ptr, score)); // 添加成绩记录
 		class_ptr->Add_Student(this); // 对应班级添加学生
+		class_ptr->Order_by_Score = false;
 		std::cout << Get_Name() << " -> 编辑成绩记录 -> 新增成绩记录 -> "
 			<< class_ptr->Get_Course_ptr()->Get_Name() << "成绩已添加\n";
 	}
@@ -369,8 +370,10 @@ void Student::Edit_Record()
 				if (new_num_2 > Record_List[new_num_1 - 1].Get_Class_ptr()->Get_Course_ptr()->Get_Full_Score())
 					std::cerr << Get_Name() << " -> 编辑成绩记录 -> 修改成绩记录 -> error（输入成绩大于课程满分）\n";
 				else
+				{
 					Record_List[new_num_1 - 1].Edit_Score(new_num_2);
-				std::cout << Get_Name() << " -> 编辑成绩记录 -> 修改成绩记录 -> 成绩已修改为 " << new_num_2 << std::endl;
+					std::cout << Get_Name() << " -> 编辑成绩记录 -> 修改成绩记录 -> 成绩已修改为 " << new_num_2 << std::endl;
+				}
 			}
 			break;
 
@@ -423,6 +426,8 @@ void Student::Edit()
 			std::cin >> new_info;
 			std::cin.ignore();
 			Edit_Name(new_info);
+			for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++)
+				(*iter).Get_Class_ptr()->Order_by_Name = false;
 			break;
 
 		case '2': // 修改学号
@@ -430,6 +435,8 @@ void Student::Edit()
 			std::cin >> new_info;
 			std::cin.ignore();
 			Edit_ID(new_info);
+			for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++)
+				(*iter).Get_Class_ptr()->Order_by_ID = false;
 			break;
 
 		case '3': // 修改院系
@@ -777,9 +784,9 @@ void Student::Print_Record() const
 		for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++)
 		{
 			std::cout << (iter - Record_List.begin() + 1) << '.' // 序号
-				<< (*iter).Get_Class_ptr()->Get_Course_ptr()->Get_Name() // 课程名
-				<< "\t授课教师：" << (*iter).Get_Class_ptr()->Get_Teacher_ptr()->Get_Name() // 教师名
-				<< "\t成绩：" << (*iter).Get_Score() // 成绩
+				<< std::setw(25) << (*iter).Get_Class_ptr()->Get_Course_ptr()->Get_Name() // 课程名
+				<< "\t授课教师：" << std::setw(10) << (*iter).Get_Class_ptr()->Get_Teacher_ptr()->Get_Name() // 教师名
+				<< "\t成绩：" << std::setw(10) << (*iter).Get_Score() // 成绩
 				<< "\t班级排名：" << (*iter).Get_Class_ptr()->Get_Rank(this) // 班级排名
 				<< std::endl;
 		}
@@ -812,4 +819,5 @@ const double Student::Record::Get_Score() const
 void Student::Record::Edit_Score(const double& score)
 {
 	Score = score;
+	Class_ptr->Order_by_Score = false;
 }

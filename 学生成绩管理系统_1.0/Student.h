@@ -44,6 +44,9 @@ public:
 	/// </summary>
 	void Print_Record() const;
 
+	/// <summary>
+	/// 从成绩记录列表删除班级
+	/// </summary>
 	void Delete_Record(Class* const class_ptr);
 
 	/// <summary>
@@ -157,7 +160,6 @@ protected:
 
 	};
 
-	bool Is_TA; // 是否为助教
 	Grade_Type Grade; // 年级
 	std::vector<Record> Record_List; // 学生成绩记录列表，每项包含班级指针、成绩
 	static std::vector<Student*> _List; // 全部学生指针列表

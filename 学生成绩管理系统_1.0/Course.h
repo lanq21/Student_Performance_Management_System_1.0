@@ -30,9 +30,6 @@ public:
 	/// <returns>第n个班级指针</returns>
 	Class* const Get_Class_ptr(const unsigned long long& n) const;
 
-	/// <returns>课程平均分</returns>
-	const double Get_Average_Score() const;
-
 	/// <summary>
 	/// 添加到班级列表
 	/// </summary>

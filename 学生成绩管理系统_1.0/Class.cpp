@@ -8,6 +8,7 @@
 #include "Course.h"
 #include "Student.h"
 #include "Teacher.h"
+#include "Teaching_Assistant.h"
 
 using std::placeholders::_1;
 using std::placeholders::_2;
@@ -16,32 +17,6 @@ std::vector<Class*> Class::_List;
 
 Class::Class(Course* const course_ptr, Teacher* const teacher_ptr) :
 	Course_ptr(course_ptr), Teacher_ptr(teacher_ptr), Order_by_Name(true), Order_by_ID(true), Order_by_Score(true) {}
-
-void Class::Edit_Course(Course* const course_ptr)
-{
-	if (course_ptr == nullptr)
-	{
-		std::cerr << "in function void Class::Edit_Course(Course* const course_ptr):\n"
-			<< "\tedit course failed.\n"
-			<< "\tcause：course_ptr == nullptr\n";
-		return;
-	}
-	else
-		Course_ptr = course_ptr;
-}
-
-void Class::Edit_Teacher(Teacher* const teacher_ptr)
-{
-	if (teacher_ptr == nullptr)
-	{
-		std::cerr << "in function void Class::Edit_Teacher(Teacher* const teacher_ptr):\n"
-			<< "\tedit teacher failed.\n"
-			<< "\tcause：teacher_ptr == nullptr\n";
-		return;
-	}
-	else
-		Teacher_ptr = teacher_ptr;
-}
 
 Class* const Class::_New(Course* course_ptr, Teacher* teacher_ptr)
 {
@@ -61,7 +36,7 @@ Class* const Class::_New(Course* course_ptr, Teacher* teacher_ptr)
 		std::cin >> serial;
 		std::cin.ignore();
 
-		if (serial>Course::_Get_Size())
+		if (serial > Course::_Get_Size())
 		{
 			std::cerr << "新增班级 -> error（序号超出列表范围）\n";
 			return nullptr;
@@ -74,7 +49,7 @@ Class* const Class::_New(Course* course_ptr, Teacher* teacher_ptr)
 
 	if (teacher_ptr == nullptr) // 教师指针 teacher_ptr 为缺省值或无效值
 	{
-		std::cout <<course_ptr->Get_Name() << " -> 新增班级 -> ";
+		std::cout << course_ptr->Get_Name() << " -> 新增班级 -> ";
 		if (Teacher::_Get_Size()) // 教师列表不为空
 		{
 			std::cout << "选择教师（输入序号）：\n\n";
@@ -86,7 +61,7 @@ Class* const Class::_New(Course* course_ptr, Teacher* teacher_ptr)
 		std::cin >> serial;
 		std::cin.ignore();
 
-		if (serial>Teacher::_Get_Size())
+		if (serial > Teacher::_Get_Size())
 		{
 			std::cerr << "新增班级 -> error（序号超出列表范围）\n";
 			return nullptr;
@@ -159,7 +134,7 @@ const _int64 Class::Get_Rank(const Student* const student_ptr)
 	auto iter = Student_List.begin();
 	for (; iter != Student_List.end(); iter++)
 	{
-		if ((*iter)==student_ptr) // 找到该学生
+		if ((*iter) == student_ptr) // 找到该学生
 			break;
 	}
 	if (iter == Student_List.end()) // 未找到成绩
@@ -399,7 +374,7 @@ void Class::_Edit_All()
 			std::cin >> new_num;
 			std::cin.ignore();
 
-			if (new_num>_List.size())
+			if (new_num > _List.size())
 				std::cerr << "删除班级 -> error（序号超出列表范围）\n";
 			else if (new_num > 0)
 				delete _List[new_num - 1];
@@ -487,29 +462,16 @@ void Class::_Read_File(std::ifstream& file)
 	}
 }
 
-void Class::Delete(Course* const course_ptr)
-{
-	size_t class_num = course_ptr->Get_Class_Size();
-	for (int i = 0; i < class_num; i++)
-		delete course_ptr->Get_Class_ptr(i); // 在析构课程前析构课程的全部班级
-}
-
-void Class::Delete(Teacher* const teacher_ptr)
-{
-	size_t class_num = teacher_ptr->Get_Class_Size();
-	for (int i = 0; i < class_num; i++)
-		delete teacher_ptr->Get_Class_ptr(i); // 在析构教师前析构教师的全部班级
-}
-
 Class::~Class()
 {
 	// 从相关课程中删除班级
 	this->Get_Course_ptr()->Delete_Class(this);
-	// 从相关教师中删除教师
+	// 从相关教师中删除班级
 	this->Get_Teacher_ptr()->Delete_Class(this);
 	// 从相关学生中删除成绩记录
 	for (auto iter = this->Student_List.begin(); iter != this->Student_List.end(); iter++)
 		(*iter)->Delete_Record(this);
+	Teaching_Assistant::_Delete_Class(this);
 	// 从班级列表中删除
 	_List.erase(std::find(_List.begin(), _List.end(), this));
 

@@ -9,7 +9,7 @@
 std::vector<Teacher*> Teacher::_List;
 
 Teacher::Teacher(const std::string& name, const std::string& id, const std::string faculty, const bool& is_ta) :
-	Person(name, id, faculty), is_TA(is_ta) {}
+	Person(name, id, faculty, is_ta) {}
 
 void Teacher::Edit_ID(const std::string& id)
 {
@@ -60,7 +60,7 @@ Teacher* const Teacher::_New(std::string name, std::string id, std::string facul
 		else
 			default_faculty = faculty; // 更新默认院系
 	}
-	Teacher* teacher_ptr = new Teacher(name, id, faculty,false);
+	Teacher* teacher_ptr = new Teacher(name, id, faculty, false);
 	_List.push_back(teacher_ptr); // 添加到教师列表
 	std::cout << "新增教师 -> 已新增教师 " << name << "，编号：" << id << " 院系：" << faculty << std::endl;
 
@@ -72,7 +72,7 @@ const size_t Teacher::Get_Serial_Number() const
 	return std::find(_List.begin(), _List.end(), this) - _List.begin() + 1;
 }
 
-void Teacher::Edit_All()
+void Teacher::_Edit_All()
 {
 	while (true)
 	{
@@ -99,7 +99,7 @@ void Teacher::Edit_All()
 		{
 		case '1': // 新增教师
 			teacher_ptr = Teacher::_New(); // 在控制台新增课程
-			std::cout << "新增教师 -> 按 Enter 编辑开课班级，按其他键取消：";
+			std::cout << "新增教师 -> 按 Enter 编辑授课班级，按其他键取消：";
 			input = _getch();
 			std::cout << std::endl;
 			if (input == '\r')
@@ -164,9 +164,10 @@ void Teacher::Add_Class(Class* const class_ptr)
 
 Teacher::~Teacher()
 {
-	if (!is_TA)
+	if (!Person::Is_TA)
 	{
-		Class::Delete(this); // 删除相关班级
+		for (size_t i = Get_Class_Size(); i > 0; i--)
+			delete Get_Class_ptr(int(i - 1)); // 删除相关班级
 		_List.erase(std::find(_List.begin(), _List.end(), this)); // 从教师列表中删除
 		std::cout << "删除教师 -> 已删除教师 " << Get_Name() << std::endl;
 	}
@@ -429,7 +430,7 @@ std::ostream& operator<<(std::ostream& output, const Teacher& teacher_obj)
 	for (auto iter = teacher_obj.Class_List.begin(); iter != teacher_obj.Class_List.end(); iter++)
 	{
 		output << iter - teacher_obj.Class_List.begin() + 1 << '.';
-		output<<(*iter);
+		output << (*iter);
 	}
 	return output;
 }

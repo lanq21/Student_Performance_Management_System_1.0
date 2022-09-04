@@ -14,7 +14,6 @@ class Class
 {
 public:
 
-
 	/// <summary>
 	/// 在控制台构造
 	/// </summary>
@@ -100,22 +99,13 @@ public:
 	/// <param name="file">文件输入流对象</param>
 	static void _Read_File(std::ifstream& file);
 
-	/// <summary>
-	/// 因析构课程导致的班级析构
-	/// </summary>
-	/// <param name="course_ptr"课程指针></param>
-	static void Delete(Course* const course_ptr);
-
-	/// <summary>
-	/// 因析构教师导致的班级析构
-	/// </summary>
-	/// <param name="teacher_ptr">教师指针</param>
-	static void Delete(Teacher* const teacher_ptr);
-
 	~Class();
 
-private:
+	bool Order_by_Name; // 标记：按照学生姓名有序
+	bool Order_by_ID; // 标记：按照学生学号有序
+	bool Order_by_Score; // 标记：按照学生成绩有序
 
+private:
 
 	/// <summary>
 	/// 构造函数
@@ -145,23 +135,8 @@ private:
 	/// <param name="student_ptr_2">学生二指针</param>
 	bool compare_score(Student* const student_ptr_1, Student* const student_ptr_2) const;
 
-	/// <summary>
-	/// 修改课程指针
-	/// </summary>
-	/// <param name="course_ptr">课程指针</param>
-	void Edit_Course(Course* const course_ptr);
-
-	/// <summary>
-	/// 修改教师指针
-	/// </summary>
-	/// <param name="teacher_ptr">教师指针</param>
-	void Edit_Teacher(Teacher* const teacher_ptr);
-
 	Course* Course_ptr; // 课程指针
 	Teacher* Teacher_ptr; // 教师指针
 	static std::vector<Class*> _List; // 全部班级指针列表
 	std::vector<Student*> Student_List; // 学生列表
-	bool Order_by_Name; // 标记：按照学生姓名有序
-	bool Order_by_ID; // 标记：按照学生学号有序
-	bool Order_by_Score; // 标记：按照学生成绩有序
 };

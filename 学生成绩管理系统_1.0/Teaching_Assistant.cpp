@@ -9,7 +9,7 @@
 std::vector<Teaching_Assistant*> Teaching_Assistant::_List;
 
 Teaching_Assistant::Teaching_Assistant(const std::string& name, const std::string& id, const std::string& faculty, const Grade_Type grade) :
-	Person(name, id, faculty), Student(name, id, faculty, grade, true), Teacher(name, id, faculty,true) {}
+	Person(name, id, faculty, true), Student(name, id, faculty, grade, true), Teacher(name, id, faculty, true) {}
 
 Teaching_Assistant* const Teaching_Assistant::_New(std::string name, std::string id, std::string faculty, Grade_Type grade)
 {
@@ -139,11 +139,13 @@ void Teaching_Assistant::_Print_All()
 		{
 			std::cout << "辅导班级：\n";
 			for (auto iter_2 = (*iter)->Class_List.begin(); iter_2 != (*iter)->Class_List.end(); iter_2++)
-				std::cout <<"\t\t\t\t\t\t\t" << iter_2 - (*iter)->Class_List.begin() + 1 << '.' // 序号
+				std::cout << "\t\t\t\t\t\t\t" << iter_2 - (*iter)->Class_List.begin() + 1 << '.' // 序号
 				<< "课程 " << (*iter_2)->Get_Course_ptr()->Get_Name()// 课程名
 				<< "，教师 " << (*iter_2)->Get_Teacher_ptr()->Get_Name()// 教师名
 				<< std::endl;
 		}
+		else
+			std::cout << std::endl;
 	}
 }
 
@@ -157,9 +159,21 @@ void Teaching_Assistant::_Add_Teaching_Assistant(Teaching_Assistant* const teach
 		_List.push_back(teaching_assistant_ptr);
 }
 
+void Teaching_Assistant::_Delete_Class(Class* const class_ptr)
+{
+	for (size_t i = _List.size(); i > 0; i--)
+		for (size_t j = _List[i - 1]->Class_List.size(); j > 0; j--)
+		{
+			if (_List[i - 1]->Class_List[j - 1] == class_ptr) // 找到班级
+				_List[i - 1]->Class_List.erase(_List[i - 1]->Class_List.begin() + j - 1);
+		}
+}
+
 Teaching_Assistant::~Teaching_Assistant()
 {
-	_List.erase(std::find(_List.begin(), _List.end(), this)); // 从助教列表中删除
+	auto iter = std::find(_List.begin(), _List.end(), this);
+	if (iter != _List.end())
+		_List.erase(iter); // 从助教列表中删除
 	std::cout << "删除助教 -> 已删除助教 " << Get_Name() << std::endl;
 }
 
@@ -212,10 +226,10 @@ void Teaching_Assistant::_Write_File(std::ofstream& file)
 		if (!(*iter)->Class_List.empty()) // 辅导班级列表不为空
 		{
 			auto iter_2 = (*iter)->Class_List.begin();
-			file << " | ` "<< (*iter_2)->Get_Serial_Number(); // 写入第一个序号
+			file << " | ` " << (*iter_2)->Get_Serial_Number(); // 写入第一个序号
 			iter_2++;
 			for (; iter_2 != (*iter)->Class_List.end(); iter_2++)
-				file << " ` 、 ` "<<(*iter_2)->Get_Serial_Number() ;
+				file << " ` 、 ` " << (*iter_2)->Get_Serial_Number();
 			file << " ` |\n";
 		}
 		else
@@ -278,7 +292,7 @@ void Teaching_Assistant::_Read_File(std::ifstream& file)
 
 		file.ignore(std::numeric_limits<std::streamsize>::max(), '|'); // 定位到辅导班级列表
 		file >> delimiter; // 读入 '`' 或 '|'
-		while(delimiter=='`')
+		while (delimiter == '`')
 		{
 			file >> num_class // 班级序号
 				>> delimiter; // '`'
@@ -388,5 +402,4 @@ void Teaching_Assistant::Edit_Class()
 		if (input != 'E' && input != 'e') // 结束编辑
 			break;
 	}
-
 }
