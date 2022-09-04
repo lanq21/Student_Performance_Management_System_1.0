@@ -36,6 +36,7 @@
     <ClCompile Include="Teaching_Assistant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="in_file.md" />
     <None Include="out_file.md" />
   </ItemGroup>
