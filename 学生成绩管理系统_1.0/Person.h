@@ -42,7 +42,7 @@ protected:
 	/// <param name="name">姓名</param>
 	/// <param name="id">编号</param>
 	/// <param name="faculty">院系</param>
-	Person(const std::string& name = " ", const std::string& id = "0", const std::string& faculty = "电子系");
+	Person(const std::string& name = " ", const std::string& id = "0", const std::string& faculty = "电子系", const bool& is_ta = false);
 
 	/// <summary>
 	/// 编辑对象名称
@@ -61,6 +61,8 @@ protected:
 	/// </summary>
 	/// <param name="faculty">院系</param>
 	void Edit_Faculty(const std::string& faculty);
+
+	bool Is_TA; // 是否为助教
 
 private:
 

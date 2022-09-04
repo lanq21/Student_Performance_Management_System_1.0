@@ -40,7 +40,7 @@ void Console()
 			if (Teacher::_Get_Size() == 0)
 				std::cerr << "查看教师 -> （当前无教师）\n";
 			else
-			Teacher::_Print_All();
+				Teacher::_Print_All();
 			std::cout << std::endl;
 			break;
 		case '3':
@@ -48,7 +48,7 @@ void Console()
 			if (Class::_Get_Size() == 0)
 				std::cerr << "查看班级 -> （当前无班级）\n";
 			else
-			Class::_Print_All();
+				Class::_Print_All();
 			std::cout << std::endl;
 			break;
 		case '4':
@@ -56,7 +56,7 @@ void Console()
 			if (Student::_Get_Size() == 0)
 				std::cerr << "查看学生 -> （当前无学生）\n";
 			else
-			Student::_Print_All();
+				Student::_Print_All();
 			if (Teaching_Assistant::_Get_Size())
 			{
 				std::cout << "查看学生 -> 助教列表：\n";
@@ -71,7 +71,7 @@ void Console()
 			break;
 		case '6':
 			std::cout << "编辑教师：\n";
-			Teacher::Edit_All();
+			Teacher::_Edit_All();
 			std::cout << std::endl;
 			break;
 		case '7':

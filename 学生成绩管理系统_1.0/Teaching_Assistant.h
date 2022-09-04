@@ -43,6 +43,11 @@ public:
 	static void _Add_Teaching_Assistant(Teaching_Assistant* const teaching_assistant_ptr);
 
 	/// <summary>
+	/// 因班级析构导致的删除班级指针
+	/// </summary>
+	static void _Delete_Class(Class* const class_ptr);
+
+	/// <summary>
 	/// 清空成绩列表
 	/// </summary>
 	virtual ~Teaching_Assistant();

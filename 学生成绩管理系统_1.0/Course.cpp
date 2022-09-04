@@ -82,32 +82,6 @@ Class* const Course::Get_Class_ptr(const unsigned long long& n) const
 		return Class_List[n];
 }
 
-const double Course::Get_Average_Score() const
-{
-	if (Class_List.empty())
-	{
-		std::cerr << "课程 " << _Get_Size() << " 平均分 -> error（当前课程无班级）\n";
-		return 0;
-	}
-	else
-	{
-		double total_score = 0; // 成绩求和
-		size_t total_student = 0; // 学生数求和
-		for (auto iter = Class_List.begin(); iter != Class_List.end(); iter++)
-		{
-			total_score += (*iter)->Get_Average_Score() * (*iter)->Get_Student_Size();
-			total_student += (*iter)->Get_Student_Size();
-		}
-		if (total_student == 0)
-		{
-			std::cerr << "课程 " << _Get_Size() << " 平均分 -> error（当前课程无学生）\n";
-			return 0;
-		}
-		else
-			return total_score / total_student;
-	}
-}
-
 void Course::Edit()
 {
 	while (true)
@@ -124,8 +98,7 @@ void Course::Edit()
 		{
 		case '1': // 修改课程名
 			std::cout << "编辑课程 -> " << Get_Name() << " -> 新课程名：";
-			std::cin >> new_info;
-			std::cin.ignore();
+			getline(std::cin, new_info);
 			Edit_Name(new_info);
 			break;
 
@@ -512,7 +485,8 @@ void Course::_Read_File(std::ifstream& file)
 
 Course::~Course()
 {
-	Class::Delete(this); // 删除相关班级
+	for (size_t i = Get_Class_Size(); i > 0; i--)
+		delete Get_Class_ptr(i - 1); // 删除相关班级
 	_List.erase(std::find(_List.begin(), _List.end(), this)); // 从课程列表中删除
 	std::cout << "删除课程 -> 已删除课程 " << Get_Name() << std::endl;
 }
