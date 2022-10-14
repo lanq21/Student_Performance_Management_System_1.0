@@ -146,6 +146,7 @@ int main()
 				std::cerr << "error（文件未打开）\n";
 				break;
 			}
+
 		case '1':
 		case 'C':
 		case 'c': // 从控制台编辑数据
@@ -170,6 +171,7 @@ int main()
 					std::cerr << "error（文件未打开）\n";
 			}
 			break;
+
 		case '3':
 		case 27: // 退出
 			for (size_t i = Class::_Get_Size(); i > 0; i--)
