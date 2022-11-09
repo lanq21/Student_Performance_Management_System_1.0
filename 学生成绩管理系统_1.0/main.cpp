@@ -6,6 +6,7 @@
 #include "Student.h"
 #include "Teacher.h"
 #include "Teaching_Assistant.h"
+#include <Windows.h>
 
 /// <summary>
 /// 从控制台添加数据
@@ -28,7 +29,8 @@ void Console()
 		switch (input)
 		{
 		case '1':
-			std::cout << "查看课程：\n";
+			system("cls");
+			std::cout << "查看课程：\n\n";
 			if (Course::_Get_Size() == 0)
 				std::cerr << "查看课程 -> （当前无课程）\n";
 			else
@@ -36,7 +38,8 @@ void Console()
 			std::cout << std::endl;
 			break;
 		case '2':
-			std::cout << "查看教师：\n";
+			system("cls");
+			std::cout << "查看教师：\n\n";
 			if (Teacher::_Get_Size() == 0)
 				std::cerr << "查看教师 -> （当前无教师）\n";
 			else
@@ -44,7 +47,8 @@ void Console()
 			std::cout << std::endl;
 			break;
 		case '3':
-			std::cout << "查看班级：\n";
+			system("cls");
+			std::cout << "查看班级：\n\n";
 			if (Class::_Get_Size() == 0)
 				std::cerr << "查看班级 -> （当前无班级）\n";
 			else
@@ -52,35 +56,32 @@ void Console()
 			std::cout << std::endl;
 			break;
 		case '4':
-			std::cout << "查看学生：\n";
+			system("cls");
+			std::cout << "查看学生：\n\n";
 			if (Student::_Get_Size() == 0)
 				std::cerr << "查看学生 -> （当前无学生）\n";
 			else
 				Student::_Print_All();
 			if (Teaching_Assistant::_Get_Size())
 			{
-				std::cout << "查看学生 -> 助教列表：\n";
+				std::cout << "\n查看学生 -> 助教列表：\n\n";
 				Teaching_Assistant::_Print_All();
 			}
 			std::cout << std::endl;
 			break;
 		case '5':
-			std::cout << "编辑课程：\n";
 			Course::_Edit_All();
 			std::cout << std::endl;
 			break;
 		case '6':
-			std::cout << "编辑教师：\n";
 			Teacher::_Edit_All();
 			std::cout << std::endl;
 			break;
 		case '7':
-			std::cout << "编辑班级：\n";
 			Class::_Edit_All();
 			std::cout << std::endl;
 			break;
 		case '8':
-			std::cout << "编辑学生：\n";
 			Student::_Edit_All();
 			std::cout << std::endl;
 			break;
@@ -100,13 +101,14 @@ void Console()
 
 int main()
 {
-	std::cout << "\n\n\n\t\t\t\t学生成绩管理系统 v1.0\n\n\n";
 	char input; // 功能选项
 	std::string file_name; // 文件名
 	std::ifstream file_in; // 输入文件
 	std::ofstream file_out; // 输出文件
 	while (true)
 	{
+		system("cls");
+		std::cout << "\n\n\n\t\t\t\t学生成绩管理系统 v1.0\n\n\n";
 		std::cout << "开始工作 -> 1.从控制台添加数据（C/c）    2.从文件导入数据（F/f）    3.退出（Eec)\n";
 		input = _getch();
 		switch (input)
@@ -115,9 +117,16 @@ int main()
 		case 'F':
 		case 'f': // 从文件导入数据
 			std::cout << "文件名（仅支持 ANSI编码，带有模板格式的 .md 文件）：";
+
 			std::cin >> file_name;
 			std::cin.ignore(); // 避免输入缓冲区残留 Enter 对接受单字符和接受 Enter 作为默认输入标志的影响
 			file_in.open(file_name, std::ios_base::in);
+
+			//double dwFlags = 0;
+			//const char* filter = ("文本文件*.txt|*.txt|word文档*.doc|*.doc|所有文件(*.*)|*.*||");
+			//CFileDialog dlg(true, ("txt"), NULL, dwFlags, filter);
+
+
 			if (file_in.is_open())
 			{
 				// 读取文件
@@ -143,7 +152,8 @@ int main()
 			}
 			else
 			{
-				std::cerr << "error（文件未打开）\n";
+				std::cerr << "\nerror（文件未打开）\n";
+				Sleep(500);
 				break;
 			}
 
@@ -168,7 +178,10 @@ int main()
 					file_out.close();
 				}
 				else
-					std::cerr << "error（文件未打开）\n";
+				{
+					std::cerr << "\nerror（文件未打开）\n";
+					Sleep(500);
+				}
 			}
 			break;
 

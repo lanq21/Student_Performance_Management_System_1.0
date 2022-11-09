@@ -130,7 +130,7 @@ void Teaching_Assistant::_Print_All()
 {
 	for (auto iter = _List.begin(); iter != _List.end(); iter++)
 	{
-		std::cout << iter - _List.begin() + 1 << '.'  // 序号
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.'  // 序号
 			<< std::setw(10) << std::left << (*iter)->Get_Name() // 助教姓名
 			<< "学号：" << std::setw(15) << std::left << (*iter)->Get_ID() // 助教学号
 			<< "院系：" << std::setw(10) << std::left << (*iter)->Get_Faculty(); // 院系

@@ -133,6 +133,8 @@ void Student::_Edit_All()
 {
 	while (true)
 	{
+		system("cls");
+		std::cout << "编辑学生：\n";
 		bool flag = false; // 标记：学生列表为空，2、3 属于 “其他键”
 		if (_List.empty())
 		{
@@ -523,11 +525,11 @@ void Student::_Print_All()
 {
 	for (auto iter = _List.begin(); iter != _List.end(); iter++)
 	{
-		std::cout << iter - _List.begin() + 1 << '.'; // 打印序号
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.' << std::left; // 打印序号
 		if ((*iter)->Get_is_TA() == true)
-			std::cout << std::setw(15) << "（助教）" + (*iter)->Get_Name();
+			std::cout << std::setw(20) << "（助教）" + (*iter)->Get_Name();
 		else
-			std::cout << std::setw(10) << (*iter)->Get_Name(); // 打印姓名
+			std::cout << std::setw(20) << (*iter)->Get_Name(); // 打印姓名
 		std::cout << "学号：" << std::setw(15) << std::left << (*iter)->Get_ID() // 打印学号
 			<< "院系：" << std::setw(8) << std::left << (*iter)->Get_Faculty(); // 打印院系
 		switch ((*iter)->Get_Grade()) // 打印年级
@@ -575,12 +577,62 @@ void Student::_Print_All()
 	}
 }
 
+void Student::_Print_All_Simple()
+{
+	for (auto iter = _List.begin(); iter != _List.end(); iter++)
+	{
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.' << std::left; // 打印序号
+		if ((*iter)->Get_is_TA() == true)
+			std::cout << std::setw(20) << "（助教）" + (*iter)->Get_Name();
+		else
+			std::cout << std::setw(20) << (*iter)->Get_Name(); // 打印姓名
+		std::cout << "学号：" << std::setw(15) << std::left << (*iter)->Get_ID() // 打印学号
+			<< "院系：" << std::setw(8) << std::left << (*iter)->Get_Faculty(); // 打印院系
+		switch ((*iter)->Get_Grade()) // 打印年级
+		{
+		case undergraduate_1:
+			std::cout << "年级：" << std::setw(16) << std::left << "本科一年级";
+			break;
+		case undergraduate_2:
+			std::cout << "年级：" << std::setw(16) << std::left << "本科二年级";
+			break;
+		case undergraduate_3:
+			std::cout << "年级：" << std::setw(16) << std::left << "本科三年级";
+			break;
+		case undergraduate_4:
+			std::cout << "年级：" << std::setw(16) << std::left << "本科四年级";
+			break;
+		case master_1:
+			std::cout << "年级：" << std::setw(16) << std::left << "硕士研究生一年级";
+			break;
+		case master_2:
+			std::cout << "年级：" << std::setw(16) << std::left << "硕士研究生二年级";
+			break;
+		case master_3:
+			std::cout << "年级：" << std::setw(16) << std::left << "硕士研究生三年级";
+			break;
+		case PhD_1:
+			std::cout << "年级：" << std::setw(16) << std::left << "博士研究生一年级";
+			break;
+		case PhD_2:
+			std::cout << "年级：" << std::setw(16) << std::left << "博士研究生二年级";
+			break;
+		case PhD_3:
+			std::cout << "年级：" << std::setw(16) << std::left << "博士研究生三年级";
+		}
+		std::cout << std::endl;
+	}
+}
+
 void Student::_Score_Manage()
 {
 	while (true)
 	{
+		system("cls");
+		std::cout << "学生成绩 -> 学生列表：\n\n";
+		Student::_Print_All_Simple();
 		std::string id;
-		std::cout << "学生成绩 -> 输入学号查询成绩，或按 Enter 取消：";
+		std::cout << "\n学生成绩 -> 输入学号查询成绩，或按 Enter 取消：";
 		getline(std::cin, id);
 		if (id.empty()) // 输入了 Enter
 			return;
@@ -783,7 +835,7 @@ void Student::Print_Record() const
 		std::cout << Get_Name() << " 成绩记录：" << std::endl;
 		for (auto iter = Record_List.begin(); iter != Record_List.end(); iter++)
 		{
-			std::cout << (iter - Record_List.begin() + 1) << '.' // 序号
+			std::cout << std::right << std::setw(3) << iter - Record_List.begin() + 1 << '.' << std::left // 序号
 				<< std::setw(25) << (*iter).Get_Class_ptr()->Get_Course_ptr()->Get_Name() // 课程名
 				<< "\t授课教师：" << std::setw(10) << (*iter).Get_Class_ptr()->Get_Teacher_ptr()->Get_Name() // 教师名
 				<< "\t成绩：" << std::setw(10) << (*iter).Get_Score() // 成绩

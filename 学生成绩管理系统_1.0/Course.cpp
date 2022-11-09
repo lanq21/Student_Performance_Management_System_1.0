@@ -159,6 +159,7 @@ void Course::_Score_Manage()
 {
 	while (true)
 	{
+		system("cls");
 		unsigned long long serial; // 从控制台输入序号
 
 		if (_Get_Size()) // 课程列表不为空
@@ -235,6 +236,8 @@ void Course::_Edit_All()
 {
 	while (true)
 	{
+		system("cls");
+		std::cout << "编辑课程：\n";
 		bool flag = false; // 标记：课程列表为空，2、3 属于 “其他键”
 		if (_List.empty())
 		{
@@ -414,7 +417,7 @@ void Course::_Print_All()
 {
 	for (auto iter = _List.begin(); iter != _List.end(); iter++)
 	{
-		std::cout << iter - _List.begin() + 1 << '.' // 序号
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.'  // 序号
 			<< std::setw(25) << std::left << (*iter)->Get_Name() // 课程名
 			<< "课程满分：" << std::setw(5) << (*iter)->Get_Full_Score(); // 课程满分
 

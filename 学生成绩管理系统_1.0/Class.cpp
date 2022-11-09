@@ -332,7 +332,7 @@ void Class::Print() const
 void Class::_Print_All()
 {
 	for (auto iter = _List.begin(); iter != _List.end(); iter++)
-		std::cout << iter - _List.begin() + 1 << '.' // 序号
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.' << std::left // 序号
 		<< "班级：课程 " << (*iter)->Get_Course_ptr()->Get_Name()
 		<< "，教师 " << (*iter)->Get_Teacher_ptr()->Get_Name()
 		<< "，学生人数：" << (*iter)->Student_List.size()
@@ -343,6 +343,8 @@ void Class::_Edit_All()
 {
 	while (true)
 	{
+		system("cls");
+		std::cout << "编辑班级：\n";
 		bool flag = false; // 标记：班级列表为空，2 属于 “其他键”
 		if (_List.empty())
 		{

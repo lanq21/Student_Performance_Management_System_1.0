@@ -76,6 +76,8 @@ void Teacher::_Edit_All()
 {
 	while (true)
 	{
+		system("cls");
+		std::cout << "编辑教师：\n";
 		bool flag = false; // 标记：教师列表为空，2、3 属于 “其他键”
 		if (_List.empty())
 		{
@@ -351,7 +353,7 @@ void Teacher::_Print_All()
 {
 	for (auto iter = _List.begin(); iter != _List.end(); iter++)
 	{
-		std::cout << iter - _List.begin() + 1 << '.'  // 序号
+		std::cout << std::right << std::setw(3) << iter - _List.begin() + 1 << '.'  // 序号
 			<< std::setw(10) << std::left << (*iter)->Get_Name() // 教师姓名
 			<< "编号：" << std::setw(15) << std::left << (*iter)->Get_ID() // 教师编号
 			<< "院系：" << std::setw(10) << std::left << (*iter)->Get_Faculty(); // 院系

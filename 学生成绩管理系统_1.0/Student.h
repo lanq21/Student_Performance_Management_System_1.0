@@ -74,6 +74,11 @@ public:
 	static void _Print_All();
 
 	/// <summary>
+	/// 仅打印姓名和学号
+	/// </summary>
+	static void _Print_All_Simple();
+
+	/// <summary>
 	/// 在控制台管理成绩
 	/// </summary>
 	static void _Score_Manage();
